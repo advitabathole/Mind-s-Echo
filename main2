@@ -1,0 +1,98 @@
+import random
+
+class Game:
+    def __init__(self):
+        self.mental_health = 100
+        self.emotions = {"happiness": 50, "sadness": 50, "anxiety": 50}
+        self.ai_companion = "Echo"
+        self.inventory = []
+        self.game_over = False
+
+    def start(self):
+        print("Welcome to 'Mind's Echo'.")
+        print("You are navigating through your thoughts with the help of your AI companion, Echo.")
+        self.main_loop()
+
+    def main_loop(self):
+        while not self.game_over:
+            print(f"\nYour mental health is at: {self.mental_health}")
+            print(f"Emotional States: {self.emotions}")
+            self.show_choices()
+            choice = input("What do you want to do? (1/2/3/4): ")
+            self.handle_choice(choice)
+            self.trigger_event()
+
+    def show_choices(self):
+        print("\nChoose a path:")
+        print("1. Talk to Echo about your feelings.")
+        print("2. Take a walk outside.")
+        print("3. Ignore your feelings.")
+        print("4. Journal your thoughts.")
+
+    def handle_choice(self, choice):
+        if choice == "1":
+            self.talk_to_echo()
+        elif choice == "2":
+            self.take_walk()
+        elif choice == "3":
+            self.ignore_feelings()
+        elif choice == "4":
+            self.journal_thoughts()
+        else:
+            print("Invalid choice. Please try again.")
+
+    def talk_to_echo(self):
+        print(f"\n{self.ai_companion}: 'I'm here for you. What’s on your mind?'")
+        response = input("You can share your feelings or ask for advice. (type something): ")
+        self.emotions['sadness'] -= 10  # Talking can reduce sadness
+        print(f"{self.ai_companion}: 'Thank you for sharing. It’s important to talk about how you feel.'")
+        self.check_game_over()
+
+    def take_walk(self):
+        print("\nYou take a deep breath and step outside.")
+        print("The fresh air clears your mind.")
+        self.emotions['anxiety'] -= 15  # Walking reduces anxiety
+        self.check_game_over()
+
+    def ignore_feelings(self):
+        print("\nYou decide to ignore your feelings.")
+        print("The weight of your thoughts feels heavier.")
+        self.emotions['sadness'] += 20  # Ignoring feelings increases sadness
+        self.check_game_over()
+
+    def journal_thoughts(self):
+        print("\nYou write down your thoughts in your journal.")
+        entry = input("What do you want to write? (type something): ")
+        print(f"You wrote: '{entry}'")
+        self.emotions['happiness'] += 10  # Journaling can improve happiness
+        self.check_game_over()
+
+    def trigger_event(self):
+        # Random events affecting mental health
+        event_chance = random.randint(1, 10)
+        if event_chance <= 3:  # 30% chance for a random event
+            self.random_event()
+
+    def random_event(self):
+        event_type = random.choice(["positive", "negative"])
+        if event_type == "positive":
+            print("\nA friend reaches out to check on you. It lifts your spirits!")
+            self.emotions['happiness'] += 15
+        else:
+            print("\nYou receive bad news that weighs on your mind.")
+            self.emotions['sadness'] += 15
+
+    def check_game_over(self):
+        if any(emotion < 0 for emotion in self.emotions.values()):
+            self.game_over = True
+            print("\nYour emotional state has reached a critical level. It's time to seek help.")
+            print("Game Over.")
+        elif self.mental_health <= 0:
+            self.game_over = True
+            print("\nYour mental health has reached a critical level. It's time to seek help.")
+            print("Game Over.")
+
+# Run the game
+if __name__ == "__main__":
+    game = Game()
+    game.start()
